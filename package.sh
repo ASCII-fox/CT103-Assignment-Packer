@@ -1,0 +1,180 @@
+#!/bin/bash
+
+# package.sh
+# MIT No Attribution
+#
+# Copyright 2025 Matthew Conroy
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this
+# software and associated documentation files (the "Software"), to deal in the Software
+# without restriction, including without limitation the rights to use, copy, modify,
+# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+print_usage()
+{
+    echo "USAGE:"
+    echo "    ./package.sh"
+    echo "DESCRIPTION:"
+    echo "    Package a CT103 assignment to the specifications of the lecturer."
+    echo "    Intended to further automate the lab classes and to remove the need for a document editor like word."
+    echo "    Just edit source/source.c, build(or package.sh), add some screenshots to screenshots/, then package.sh"
+    echo "DEPENDANCIES:"
+    echo "    pdflatex - for generating the assignment pdf"
+    echo "    pandoc   - for generating the assignment docx"
+    echo "    zip      - to create the zip archive"
+    echo "    LaTeX    - The .tex files require various latex packages and is tested with TexLive, other distros may work"
+    echo "ARGUMENTS:"
+    echo "    -help, --help - print usage"
+    echo "VARIABLES:"
+    echo "    NAME        - student name"
+    echo "    STUDENT_ID  - student ID number"
+    echo "    TITLE       - (optional) assignment title"
+    echo '                  DEFAULT: "Assignment"'
+    echo "    DATE        - current date"
+    echo '                  DEFAULT: "%d/%m/%Y"'
+    echo "    LATEX_TITLE - (optional) title to be used in latex, note latex has speical chars"
+    echo '                  DEFAULT: "<TITLE>"'
+    echo "    LATEX_NAME  - (optional) student name to be used in latex, note latex has speical chars"
+    echo '                  DEFAULT: "<NAME>"'
+    echo "INPUT FILES:"
+    echo "    build.sh               - script used to compile your program"
+    echo "    source/source.c        - Input C source file"
+    echo "    latex/doc.tex          - Master Latex file, \inputs generated .tex files"
+    echo "    screenshots/*          - vaild images used for inclusion in the assignment document"
+    echo "    screenshots/*_pre.tex  - latex to be placed berfore inserting the image file of the same name"
+    echo "    screenshots/*_post.tex - latex to be placed after inserting the image file of the same name"
+    echo "OUTPUT FILES:"
+    echo "    <Title>.zip          - output zip file; the upload file"
+    echo "    <Title>/*            - output uncompressed folder and files"
+    echo "    <Title>/source.c     - source.c with generated comment header"
+    echo "    <Title>/<title>.pdf  - output pdf made with pdflatex"
+    echo "    <Title>/<title>.docx - output docx made with pandoc"
+    echo "    latex/title.tex      - generated latex file with title and name definitons"
+    echo "    latex/image.tex      - generated latex file with image includes from screenshots/*"
+    echo "    latex_rubbish/*      - output of pdflatex most of which is rubbish"
+    echo "EXAMPLES:"
+    echo '    NAME="Matthew Conroy" STUDENT_ID="123456" ./package.sh'
+    echo '    TITLE="Assignment_01" NAME="Matthew Conroy" STUDENT_ID="123456" ./package.sh'
+    echo '    TITLE="Assignment_01" LATEX_TITLE="Assignment One" NAME="Matthew Conroy" STUDENT_ID="123456" ./package.sh'
+    echo "COPYRIGHT:"
+    echo "    Copyright (c) 2025 Matthew Conroy, MIT No Attribution License <https://opensource.org/license/mit-0>"
+    echo "    Free Licence, do whatever you want just dont sue me pls"
+}
+
+log()
+{
+    if [ -z "${NO_LOGS}"]; then
+        echo "[package.sh] $@"
+    fi
+}
+
+if [ "$1" == "--help" ] || [ "$1" == "-help" ]; then
+    print_usage
+    exit 0
+fi
+
+if [ -z "${NAME}" ]; then
+    echo "ERROR: Varible NAME is unset"
+    print_usage
+    exit 1
+fi
+if [ -z "${STUDENT_ID}" ]; then
+    echo "ERROR: Varible STUDENT_ID is unset"
+    print_usage
+    exit 1
+fi
+
+if [ -z "${TITLE}" ]; then
+    export TITLE="Assignment"
+fi
+if [ -z "${LATEX_TITLE}" ]; then
+    LATEX_TITLE="${TITLE}"
+fi
+if [ -z "${LATEX_NAME}" ]; then
+    LATEX_NAME="${NAME}"
+fi
+
+if [ -z "${DATE}" ]; then
+    DATE="$(date +%d/%m/%Y)"
+fi
+
+PACKAGE_DIR="${TITLE}/"
+SOURCE_DIR="source/"
+LATEX_DIR="latex/"
+LATEX_RUBBISH_DIR_NAME="latex_rubbish"
+LATEX_RUBBISH_DIR="${LATEX_RUBBISH_DIR_NAME}/"
+SCREENSHOT_DIR="screenshots/"
+
+LATEX_GENERATED_MESSAGE="%generated by package.sh"
+
+log "Making Directories"
+mkdir -p "${PACKAGE_DIR}" || exit $?
+mkdir -p "${PACKAGE_DIR}${SCREENSHOT_DIR}" || exit $?
+mkdir -p "${SCREENSHOT_DIR}" || exit $?
+mkdir -p "${LATEX_RUBBISH_DIR}"  || exit $?
+
+log "Building: ${SOURCE_DIR}source.c"
+./build.sh || exit $?
+
+#Generate info header in the source.c file
+SOURCE_C_GEN_FILE="${PACKAGE_DIR}source.c"
+log "Generateing: ${SOURCE_C_GEN_FILE}"
+echo "/*"                         > "${SOURCE_C_GEN_FILE}"
+echo "NAME      : ${NAME}"       >> "${SOURCE_C_GEN_FILE}"
+echo "STUDNET ID: ${STUDENT_ID}" >> "${SOURCE_C_GEN_FILE}"
+echo "DATE      : ${DATE}"       >> "${SOURCE_C_GEN_FILE}"
+echo "*/"                        >> "${SOURCE_C_GEN_FILE}"
+cat "${SOURCE_DIR}source.c"      >> "${SOURCE_C_GEN_FILE}"
+
+#Generate latex file for the tile
+TITLE_TEX_FILE="${LATEX_DIR}title.tex"
+log "Generateing: ${TILTE_TEX_FILE}"
+echo "${LATEX_GENERATED_MESSAGE}"               > "${TITLE_TEX_FILE}"
+echo "\title{${LATEX_TITLE}}"                  >> "${TITLE_TEX_FILE}"
+echo "\author{${LATEX_NAME}}"                  >> "${TITLE_TEX_FILE}"
+echo "\date{${DATE}}"                          >> "${TITLE_TEX_FILE}"
+echo "\newcommand\thestudentid{${STUDENT_ID}}" >> "${TITLE_TEX_FILE}"
+
+#loop over every file in the ss dir and generate a images.tex
+IMAGES_TEX_FILE="${LATEX_DIR}images.tex"
+log "Generateing: ${IMAGES_TEX_FILE}"
+echo "${LATEX_GENERATED_MESSAGE}" > "${IMAGES_TEX_FILE}"
+for file in $SCREENSHOT_DIR/*; do
+    MIME_TYPE="$(file "${file}" -b --mime-type)"
+    if [[ "${MIME_TYPE}" != image* ]]; then
+        continue
+    fi
+    log "Processing: ${file}"
+    TEX_PRE="${file%.*}_pre.tex"
+    TEX_POST="${file%.*}_post.tex"
+    if [ -f "${TEX_PRE}" ]; then
+        log "    appending prefix: ${TEX_PRE}"
+        cat "${TEX_PRE}" >> "${IMAGES_TEX_FILE}"
+    fi
+    echo "\includegraphics[width=\textwidth]{${file}}" >> "${IMAGES_TEX_FILE}"
+
+    if [ -f "${TEX_POST}" ]; then
+        log "    appending postfix: ${TEX_POST}"
+        cat "${TEX_POST}" >> "${IMAGES_TEX_FILE}"
+    fi
+
+    cp "${file}" "${PACKAGE_DIR}${SCREENSHOT_DIR}"
+done
+
+log "Creating (with pandoc): ${PACKAGE_DIR}${TITLE}.docx"
+pandoc "${LATEX_DIR}doc.tex" --output "${PACKAGE_DIR}${TITLE}.docx" || exit $?
+#I hate pdflatex
+log "Creating (with pdflatex): ${PACKAGE_DIR}${TITLE}.pdf"
+pdflatex -interaction=nonstopmode -output-directory="${LATEX_RUBBISH_DIR_NAME}" "${LATEX_DIR}doc.tex" || exit $?
+cp "${LATEX_RUBBISH_DIR}doc.pdf" "${PACKAGE_DIR}${TITLE}.pdf" || exit $?
+
+log "Creating (with zip): ${TITLE}.zip"
+zip --recurse-paths "${TITLE}.zip" "${PACKAGE_DIR}" || exit $?
