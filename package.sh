@@ -169,12 +169,13 @@ for file in $SCREENSHOT_DIR/*; do
     cp "${file}" "${PACKAGE_DIR}${SCREENSHOT_DIR}"
 done
 
-log "Creating (with pandoc): ${PACKAGE_DIR}${TITLE}.docx"
-pandoc "${LATEX_DIR}doc.tex" --output "${PACKAGE_DIR}${TITLE}.docx" || exit $?
+DOC_TITLE="${TITLE}_${NAME}_${STUDENT_ID}"
+log "Creating (with pandoc): ${PACKAGE_DIR}${DOC_TITLE}.docx"
+pandoc "${LATEX_DIR}doc.tex" --output "${PACKAGE_DIR}${DOC_TITLE}.docx" || exit $?
 #I hate pdflatex
-log "Creating (with pdflatex): ${PACKAGE_DIR}${TITLE}.pdf"
+log "Creating (with pdflatex): ${PACKAGE_DIR}${DOC_TITLE}.pdf"
 pdflatex -interaction=nonstopmode -output-directory="${LATEX_RUBBISH_DIR_NAME}" "${LATEX_DIR}doc.tex" || exit $?
-cp "${LATEX_RUBBISH_DIR}doc.pdf" "${PACKAGE_DIR}${TITLE}.pdf" || exit $?
+cp "${LATEX_RUBBISH_DIR}doc.pdf" "${PACKAGE_DIR}${DOC_TITLE}.pdf" || exit $?
 
 log "Creating (with zip): ${TITLE}.zip"
 zip --recurse-paths "${TITLE}.zip" "${PACKAGE_DIR}" || exit $?
