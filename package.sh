@@ -106,7 +106,8 @@ if [ -z "${DATE}" ]; then
     DATE="$(date +%d/%m/%Y)"
 fi
 
-PACKAGE_DIR="${TITLE}/"
+PACKAGE_NAME="${TITLE}_${NAME}_${STUDENT_ID}_Submission"
+PACKAGE_DIR="${PACKAGE_NAME}/"
 SOURCE_DIR="source/"
 LATEX_DIR="latex/"
 LATEX_RUBBISH_DIR_NAME="latex_rubbish"
@@ -178,4 +179,4 @@ pdflatex -interaction=nonstopmode -output-directory="${LATEX_RUBBISH_DIR_NAME}" 
 cp "${LATEX_RUBBISH_DIR}doc.pdf" "${PACKAGE_DIR}${DOC_TITLE}.pdf" || exit $?
 
 log "Creating (with zip): ${TITLE}.zip"
-zip --recurse-paths "${TITLE}.zip" "${PACKAGE_DIR}" || exit $?
+zip --recurse-paths "${PACKAGE_NAME}.zip" "${PACKAGE_DIR}" || exit $?
