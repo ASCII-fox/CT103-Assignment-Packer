@@ -20,6 +20,7 @@ set +u
 
 print_usage() {
   cat <<EOF
+==============
 Lab Template
 ==============
 Quick usage guide:
@@ -82,6 +83,7 @@ if [ $# -gt 0 ]; then
     exit 0
   fi
 fi
+
 if [ -z "${NAME}" ]; then
   echo "ERROR: Varible NAME is unset"
   print_usage
