@@ -30,16 +30,18 @@ LaTeX    - The .tex files require various latex packages and is tested with TexL
 
 ## Variables
 ```
-NAME        - student name
-STUDENT_ID  - student ID number
-TITLE       - (optional) assignment title
+NAME         - student name
+STUDENT_ID   - student ID number
+TITLE        - (optional) assignment title
               DEFAULT: "Assignment"
-DATE        - current date
+DATE         - current date
               DEFAULT: "%d/%m/%Y"
-LATEX_TITLE - (optional) title to be used in latex, note latex has speical chars
+LATEX_TITLE  - (optional) title to be used in latex, note latex has speical chars
               DEFAULT: "<TITLE>"
-LATEX_NAME  - (optional) student name to be used in latex, note latex has speical chars
+LATEX_NAME   - (optional) student name to be used in latex, note latex has speical chars
               DEFAULT: "<NAME>"
+TEMP_CLEANUP - Removes temporary files after generation. Set to 1 to clean up, 0 to keep.
+              DEFAULT: "1"
 ```
 ## Arguments
 ```
