@@ -1,5 +1,3 @@
-#!/bin/bash
-
 if [ -z "${TITLE}" ]; then
   echo "Varible TITLE is unset"
   exit 1

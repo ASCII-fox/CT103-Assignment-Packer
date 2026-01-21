@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Configuration file for package.sh
+
+# TITLE: Should be numbered accordingly to the assignment number or week.
+# E.g "Assignment10" or "Assignment_10" for a week 10 assignment.
+export TITLE=AssignmentX
+
+# NAME: Replace with your name in the format FirstnameLastname.
+export NAME=JohnDoe
+
+# STUDENT_ID: Replace with your 8 digit student ID.
+export STUDENT_ID=12345678
+
+# TEMP_CLEANUP: "1" to automatically clean up temp files, "0" to keep them.
+export TEMP_CLEANUP=1
