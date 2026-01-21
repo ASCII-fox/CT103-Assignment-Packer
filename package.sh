@@ -76,11 +76,12 @@ if [ $# -eq 0 ]; then
 fi
 
 # --- help argument and setup ---
-if [ "$1" == "--help" ] || [ "$1" == "-help" ]; then
-  print_usage
-  exit 0
+if [ $# -gt 0 ]; then
+  if [ "$1" == "--help" ] || [ "$1" == "-help" ]; then
+    print_usage
+    exit 0
+  fi
 fi
-
 if [ -z "${NAME}" ]; then
   echo "ERROR: Varible NAME is unset"
   print_usage
