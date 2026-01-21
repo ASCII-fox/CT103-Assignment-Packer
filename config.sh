@@ -14,3 +14,6 @@ export STUDENT_ID=12345678
 
 # TEMP_CLEANUP: "1" to automatically clean up temp files, "0" to keep them.
 export TEMP_CLEANUP=1
+
+# C_STD: C standard for the smoke test. Default is c99
+export C_STD=c99

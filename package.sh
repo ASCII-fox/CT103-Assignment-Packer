@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set +u
 # package.sh
 # MIT No Attribution
 #
@@ -134,9 +134,9 @@ mkdir -p "${SCREENSHOT_DIR}" || exit $?
 # Smoke test the source file
 log "Testing: ${SOURCE_DIR}source.c"
 if ./smoke_test.sh; then
-  echo "Primative smoke test succeeded."
+  SMOKE_TEST="SUCCESS"
 else
-  echo "Primative smoke test failed."
+  SMOKE_TEST="FAILED"
   confirm
 fi
 
@@ -197,6 +197,27 @@ log "Creating (with zip): ${TITLE}.zip"
 zip --recurse-paths "${PACKAGE_NAME}.zip" "${PACKAGE_DIR}" || exit $?
 mv "${PACKAGE_NAME}.zip" "${OUTPUT_DIR}"
 
+# Final report
+
 if [ ${TEMP_CLEANUP} -eq 1 ]; then
   cleanup
 fi
+
+cat <<EOF
+
+==============
+Complete!
+==============
+Temp files removed: $([ "${TEMP_CLEANUP}" -eq 1 ] && echo "TRUE" || echo "FALSE")
+Assignment title: ${TITLE}
+Date: ${DATE}
+Student ID: ${STUDENT_ID}
+Student Name: ${STUDENT_NAME}
+
+Smoke test status: ${SMOKE_TEST} 
+^^^^^^^^^^ You can ignore this if your program needs specific compilation flags or doesn't work for the standard specified in config.sh
+
+The complete assignment archive is in the output folder.
+Location: ${OUTPUT_DIR}${PACKAGE_NAME}.zip
+==============
+EOF

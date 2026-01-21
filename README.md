@@ -52,6 +52,7 @@ TEMP_CLEANUP - Removes temporary files after generation. Set to 1 to clean up, 0
 ```
 smoke_test.sh          - Basic check to see if the program compiles. Can be ignored if unhelpful.
 config.sh              - Responsible for automatic configuration, modify this!
+output/*               - Contains output archives
 source/source.c        - Input C source file
 latex/doc.tex          - Master Latex file, \inputs contains generated .tex files
 screenshots/*          - vaild images used for inclusion in the assignment document
