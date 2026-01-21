@@ -6,13 +6,13 @@ This has been modified to work with a config file, and to primarily fit my needs
 
 ## Usage:
 ### Option 1
-1. Modify the variables in ```setup.config``` 
+1. Modify the variables in ```config.sh``` 
 2. Replace the contents of ```source.c``` with the contents of your program.
 3. Place a relevant screenshot or image into the ```screenshots/``` directory
-4. Run ```build.sh```
+4. Run ```package.sh```
 
 ### Option 2
-You can run this in the same manner as in the original template by manually specifying the variables before running. Doing it this way will ignore ```setup.config```
+You can run this in the same manner as in the original template by manually specifying the variables before running. Doing it this way will ignore ```config.sh```
 #### Examples:
 ```
 NAME="Student Name" STUDENT_ID="123456" ./package.sh
@@ -49,6 +49,7 @@ LATEX_NAME  - (optional) student name to be used in latex, note latex has speica
 ## Files
 ```
 smoke_test.sh          - Basic check to see if the program compiles. Can be ignored if unhelpful.
+config.sh              - Responsible for automatic configuration, modify this!
 source/source.c        - Input C source file
 latex/doc.tex          - Master Latex file, \inputs contains generated .tex files
 screenshots/*          - vaild images used for inclusion in the assignment document

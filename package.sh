@@ -18,60 +18,25 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-print_usage()
-{
-    echo "USAGE:"
-    echo "    ./package.sh"
-    echo "DESCRIPTION:"
-    echo "    Package a CT103 assignment to the specifications of the lecturer."
-    echo "    Intended to further automate the lab classes and to remove the need for a document editor like word."
-    echo "    Just edit source/source.c, build(or package.sh), add some screenshots to screenshots/, then package.sh"
-    echo "DEPENDANCIES:"
-    echo "    pdflatex - for generating the assignment pdf"
-    echo "    pandoc   - for generating the assignment docx"
-    echo "    zip      - to create the zip archive"
-    echo "    LaTeX    - The .tex files require various latex packages and is tested with TexLive, other distros may work"
-    echo "ARGUMENTS:"
-    echo "    -help, --help - print usage"
-    echo "VARIABLES:"
-    echo "    NAME        - student name"
-    echo "    STUDENT_ID  - student ID number"
-    echo "    TITLE       - (optional) assignment title"
-    echo '                  DEFAULT: "Assignment"'
-    echo "    DATE        - current date"
-    echo '                  DEFAULT: "%d/%m/%Y"'
-    echo "    LATEX_TITLE - (optional) title to be used in latex, note latex has speical chars"
-    echo '                  DEFAULT: "<TITLE>"'
-    echo "    LATEX_NAME  - (optional) student name to be used in latex, note latex has speical chars"
-    echo '                  DEFAULT: "<NAME>"'
-    echo "INPUT FILES:"
-    echo "    build.sh               - script used to compile your program"
-    echo "    source/source.c        - Input C source file"
-    echo "    latex/doc.tex          - Master Latex file, \inputs generated .tex files"
-    echo "    screenshots/*          - vaild images used for inclusion in the assignment document"
-    echo "    screenshots/*_pre.tex  - latex to be placed berfore inserting the image file of the same name"
-    echo "    screenshots/*_post.tex - latex to be placed after inserting the image file of the same name"
-    echo "OUTPUT FILES:"
-    echo "    <Title>.zip          - output zip file; the upload file"
-    echo "    <Title>/*            - output uncompressed folder and files"
-    echo "    <Title>/source.c     - source.c with generated comment header"
-    echo "    <Title>/<title>.pdf  - output pdf made with pdflatex"
-    echo "    <Title>/<title>.docx - output docx made with pandoc"
-    echo "    latex/title.tex      - generated latex file with title and name definitons"
-    echo "    latex/image.tex      - generated latex file with image includes from screenshots/*"
-    echo "    latex_rubbish/*      - output of pdflatex most of which is rubbish"
-    echo "EXAMPLES:"
-    echo '    NAME="Matthew Conroy" STUDENT_ID="123456" ./package.sh'
-    echo '    TITLE="Assignment_01" NAME="Matthew Conroy" STUDENT_ID="123456" ./package.sh'
-    echo '    TITLE="Assignment_01" LATEX_TITLE="Assignment One" NAME="Matthew Conroy" STUDENT_ID="123456" ./package.sh'
-    echo "COPYRIGHT:"
-    echo "    Copyright (c) 2025 Matthew Conroy, MIT No Attribution License <https://opensource.org/license/mit-0>"
-    echo "    Free Licence, do whatever you want just dont sue me pls"
+print_usage() {
+cat << EOF 
+Lab Template
+==============
+Quick usage guide:
+
+1. Modify the variables in config.sh
+2. Replace the contents of source.c with the contents of your program.
+3. Place a relevant screenshot or image into the screenshots/ directory
+4. Run package.sh
+
+See README for more detailed information.
+==============
+EOF 
 }
 
 log()
 {
-    if [ -z "${NO_LOGS}"]; then
+    if [ -z "${NO_LOGS}" ]; then
         echo "[package.sh] $@"
     fi
 }
