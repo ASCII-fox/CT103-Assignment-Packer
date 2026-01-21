@@ -71,17 +71,15 @@ log() {
 }
 # == ==
 
-# Load config if no arguments
-if [ $# -eq 0 ]; then
+# Load config if main variables are not defined
+if [ -z "${NAME:-}" ] && [ -z "${STUDENT_ID:-}" ]; then
   source config.sh
 fi
 
 # --- help argument and setup ---
-if [ $# -gt 0 ]; then
-  if [ "$1" == "--help" ] || [ "$1" == "-help" ]; then
-    print_usage
-    exit 0
-  fi
+if [ "$1" == "--help" ] || [ "$1" == "-help" ]; then
+  print_usage
+  exit 0
 fi
 
 if [ -z "${NAME}" ]; then
