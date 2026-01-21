@@ -194,8 +194,11 @@ pdflatex -interaction=nonstopmode -output-directory="${TEMP_DIR_NAME}" "${LATEX_
 cp "${TEMP_DIR}doc.pdf" "${PACKAGE_DIR}${DOC_TITLE}.pdf" || exit $?
 
 log "Creating (with zip): ${TITLE}.zip"
-zip --recurse-paths "${PACKAGE_NAME}.zip" "${PACKAGE_DIR}" || exit $?
-mv "${PACKAGE_NAME}.zip" "${OUTPUT_DIR}"
+
+cd "${TEMP_DIR}" || exit $?
+zip --recurse-paths "${PACKAGE_NAME}.zip" "${PACKAGE_NAME}" || exit $?
+cd ..
+mv "${TEMP_DIR}${PACKAGE_NAME}.zip" "${OUTPUT_DIR}"
 
 # Final report
 
