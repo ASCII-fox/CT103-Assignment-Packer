@@ -109,6 +109,10 @@ if [ -z "${TEMP_CLEANUP}" ]; then
   TEMP_CLEANUP=1
   log "Set TEMP_CLEANUP to 1"
 fi
+if [ -z "${INCLUDE_FULL_SOURCE}" ]; then
+  INCLUDE_FULL_SOURCE=1
+  log "Set INCLUDE_FULL_SOURCE to 1"
+fi
 
 if [ -z "${DATE}" ]; then
   DATE="$(date +%d/%m/%Y)"
