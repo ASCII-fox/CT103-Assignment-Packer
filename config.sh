@@ -17,3 +17,7 @@ export TEMP_CLEANUP=1
 
 # C_STD: C standard for the smoke test. Default is c99
 export C_STD=c99
+
+# INCLUDE_FULL_SOURCE: If set to 1, will add anything else you put into source/ in the archive.
+# Useful if the assignment requires other files such as a text file.
+export INCLUDE_FULL_SOURCE=1

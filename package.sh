@@ -26,9 +26,10 @@ Lab Template
 Quick usage guide:
 
 1. Modify the variables in config.sh
-2. Replace the contents of source.c with the contents of your program.
-3. Place a relevant screenshot or image into the screenshots/ directory
-4. Run package.sh
+2. Replace the contents of source/source.c with the contents of your program.
+3. Add in any relevant files into source/
+4. Place a relevant screenshot or image into the screenshots/ directory
+5. Run package.sh
 
 Your generated zip file will be present in the output folder.
 
@@ -150,6 +151,16 @@ echo "DATE      : ${DATE}" >>"${SOURCE_C_GEN_FILE}"
 echo "*/" >>"${SOURCE_C_GEN_FILE}"
 cat "${SOURCE_DIR}source.c" >>"${SOURCE_C_GEN_FILE}"
 
+if [ ${INCLUDE_FULL_SOURCE} -eq 1 ]; then
+  # Go over every file except source, and add it to the temp directory for packaging
+  for file in "${SOURCE_DIR}"*; do
+    if [[ "$(basename "$file")" == "source.c" ]]; then
+      continue
+    fi
+    cp -r "$file" "${PACKAGE_DIR}"
+  done
+fi
+
 #Generate latex file for the tile
 TITLE_TEX_FILE="${LATEX_DIR}title.tex"
 log "Generating: ${TILTE_TEX_FILE}"
@@ -213,6 +224,7 @@ Complete!
 ==============
 Temp files removed: $([ "${TEMP_CLEANUP}" -eq 1 ] && echo "TRUE" || echo "FALSE")
 Assignment title: ${TITLE}
+Full source folder included: $([ "${INCLUDE_FULL_SOURCE}" -eq 1 ] && echo "TRUE" || echo "FALSE")
 Date: ${DATE}
 Student ID: ${STUDENT_ID}
 Student Name: ${STUDENT_NAME}
