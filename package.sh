@@ -227,11 +227,11 @@ cat <<EOF
 Complete!
 ==============
 Temp files removed: $([ "${TEMP_CLEANUP}" -eq 1 ] && echo "TRUE" || echo "FALSE")
-Assignment title: ${TITLE}
 Full source folder included: $([ "${INCLUDE_FULL_SOURCE}" -eq 1 ] && echo "TRUE" || echo "FALSE")
+Assignment title: ${TITLE}
 Date: ${DATE}
 Student ID: ${STUDENT_ID}
-Student Name: ${STUDENT_NAME}
+Student Name: ${NAME}
 
 Smoke test status: ${SMOKE_TEST} 
 ^^^^^^^^^^ You can ignore this if your program needs specific compilation flags or doesn't work for the standard specified in config.sh
