@@ -3,3 +3,6 @@ output/*
 
 screenshots/*
 !screenshots/.gitkeep
+
+source/*
+!source/source.c
